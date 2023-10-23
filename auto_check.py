@@ -3,22 +3,22 @@ import time
 import pyautogui
 
 
-
-
 def click_screenshot(img_save_path):
     """
     判断CMD窗体是否可以点击，是时点击并截图，不是时返回FALSE
     :return:
     """
-    if pyautogui.locateCenterOnScreen('./help.png'):
+    if not pyautogui.locateCenterOnScreen('./help.png'):
+        print("没有找到terminal终端的 help 菜单，请确认是否被遮挡")
+        return False
+    else:
         x, y = pyautogui.locateCenterOnScreen('./help.png')
         pyautogui.click(x, y)
         time.sleep(5)
         pyautogui.screenshot(img_save_path)
         time.sleep(5)
+        print("找到terminal终端")
         return True
-    else:
-        return False
 
 
 def ocr_img(img_path):
@@ -46,8 +46,10 @@ def judge_state(result_list):
     """
     for i in range(len(result_list) - 1, -1, -1):
         if "final logs:" in result_list[i] or "Total Tests" in result_list[i]:
+            print("test is going")
             return True
         else:
+            print("测试结束")
             pass
     return False
 
@@ -96,6 +98,7 @@ def get_report_num(result_list):
             print(result_list[i])
         if "pass" in result_list[i].lower() or "fail" in result_list[i].lower() or "build" in result_list[i].lower():
             pass_exist = 1  # 只有当出现pass/fail/build时说明报告个数在cmd中全部显示，否则获取的个数不对
+            print("找到Pass/Fail/Build中的一个，退出报告计数")
             break
 
     if num_2023 == num_of and pass_exist == 1:
@@ -120,6 +123,7 @@ def get_device_num(result_list):
             print(result_list[i])
         if "state" in result_list[i].lower() or "allocation" in result_list[i].lower() or "build" in result_list[
             i].lower():
+            print("找到State/Allocation/Build中的一个，退出设备计数")
             break
     if num_online == num_available:
         return num_available
@@ -127,17 +131,18 @@ def get_device_num(result_list):
         return -1
 
 
-def input_retry(lr_num, ld_num):
+def input_retry(lr_num_p, ld_num_p):
     """
     输入retry指令
     :return:
     """
 
     # 输入指令
-    pyautogui.typewrite(f'run retry --retry {lr_num} --shard-count {ld_num}')
+    pyautogui.typewrite(f'run retry --retry {lr_num_p} --shard-count {ld_num_p}')
     time.sleep(5)
     pyautogui.press('enter')
     time.sleep(5)
+    print("输入的retry指令为: " + f'run retry --retry {lr_num_p} --shard-count {ld_num_p}')
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ import time
 import pyautogui
 from paddleocr import PaddleOCR
 
+
 def ocr_img(img_path):
     """
     对截图OCR识别
@@ -20,5 +21,6 @@ def ocr_img(img_path):
     return result_list
 
 
-aaaa = ocr_img("./imgs/lr.png")
-print("aa")
+if __name__ == "__main__":
+    aa = pyautogui.locateCenterOnScreen('model.png')
+    print(aa)
