@@ -12,12 +12,12 @@ def click_screenshot(img_save_path):
         print("没有找到terminal终端的 help 菜单，请确认是否被遮挡")
         return False
     else:
+        print("找到terminal终端")
         x, y = pyautogui.locateCenterOnScreen('./help.png')
         pyautogui.click(x, y)
         time.sleep(5)
         pyautogui.screenshot(img_save_path)
         time.sleep(5)
-        print("找到terminal终端")
         return True
 
 
