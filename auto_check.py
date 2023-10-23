@@ -46,11 +46,11 @@ def judge_state(result_list):
     """
     for i in range(len(result_list) - 1, -1, -1):
         if "final logs:" in result_list[i] or "Total Tests" in result_list[i]:
-            print("test is going")
+            print("测试结束")
             return True
         else:
-            print("测试结束")
             pass
+    print("test is going")
     return False
 
 
