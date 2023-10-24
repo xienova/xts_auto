@@ -1,3 +1,5 @@
+import os
+
 from paddleocr import PaddleOCR
 import time
 import pyautogui
@@ -28,7 +30,7 @@ def click_screenshot(img_save_path):
 def ocr_img(img_path):
     """
     对截图OCR识别
-    :return:
+    :return:识别的文字列表
     """
     # Paddleocr目前支持的多语言语种可以通过修改lang参数进行切换
     # 例如`ch`, `en`, `fr`, `german`, `korean`, `japan`
@@ -40,6 +42,7 @@ def ocr_img(img_path):
         for line in res:
             result_list.append(line[1][0])
     print(result_list)
+    os.remove(img_path) # 使用后删除图片
     return result_list
 
 
@@ -61,7 +64,7 @@ def judge_state(result_list):
 def input_lr(img_save_path):
     """
     在命令行中输入l r，获取已有的报告
-    :return:
+    :return: 识别的文字列表
     """
     pyautogui.typewrite('l r')
     time.sleep(5)
@@ -74,7 +77,7 @@ def input_lr(img_save_path):
 def input_ld(img_save_path):
     """
     在命令行中输入l r，获取已有的报告
-    :return:
+    :return:识别的文字列表
     """
     pyautogui.typewrite('l d')
     time.sleep(5)

@@ -1,4 +1,5 @@
 import time
+import os
 import pyautogui
 from paddleocr import PaddleOCR
 
@@ -22,5 +23,6 @@ def ocr_img(img_path):
 
 
 if __name__ == "__main__":
-    aa = pyautogui.locateCenterOnScreen('model.png')
-    print(aa)
+    # aa = pyautogui.locateCenterOnScreen('model.png')
+    # print(aa)
+    os.remove('imgs/cat.jpg')
