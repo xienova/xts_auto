@@ -9,8 +9,13 @@ def click_screenshot(img_save_path):
     :return:
     """
     if not pyautogui.locateCenterOnScreen('./help.png'):
-        print("没有找到terminal终端的 help 菜单，请确认是否被遮挡")
-        return False
+        print("没有找到terminal终端的 help 菜单!")
+        x, y = pyautogui.size()  # current screen resolution width and height
+        print("点击屏幕中央！")
+        pyautogui.click(x / 2, y / 2)
+        time.sleep(5)
+        pyautogui.screenshot(img_save_path)
+        time.sleep(5)
     else:
         print("找到terminal终端")
         x, y = pyautogui.locateCenterOnScreen('./help.png')
@@ -18,7 +23,6 @@ def click_screenshot(img_save_path):
         time.sleep(5)
         pyautogui.screenshot(img_save_path)
         time.sleep(5)
-        return True
 
 
 def ocr_img(img_path):
@@ -149,32 +153,31 @@ if __name__ == "__main__":
     img_paths = "./imgs/screenshot.png"
     img_lr_path = "./imgs/lr.png"
     img_ld_path = "./imgs/ld.png"
+    lr_num = 0
+    ld_num = 0
 
     while 1:
-        if click_screenshot(img_paths):  # 判断是否可以点击命令行
-            text_list = ocr_img(img_paths)  # 获取OCR后的文字
-            if judge_state(text_list):  # 判断是否结束
-                for i in range(3):  # 识别正确时退出
-                    lr_list = input_lr(img_lr_path)
-                    lr_num = get_report_num(lr_list)
-                    if lr_num != -1:
-                        break
+        click_screenshot(img_paths)  # 点击命令行或屏幕中央并截图
+        text_list = ocr_img(img_paths)  # 获取OCR后的文字
+        if judge_state(text_list):  # 判断是否结束
+            for i in range(3):  # 识别正确时退出
+                lr_list = input_lr(img_lr_path)
+                lr_num = get_report_num(lr_list)
+                if lr_num != -1:
+                    break
 
-                for i in range(3):  # 识别正确时退出
-                    ld_list = input_ld(img_ld_path)
-                    ld_num = get_device_num(ld_list)
-                    if ld_num != -1:
-                        break
+            for i in range(3):  # 识别正确时退出
+                ld_list = input_ld(img_ld_path)
+                ld_num = get_device_num(ld_list)
+                if ld_num != -1:
+                    break
 
-                if lr_num != -1 and ld_num != -1:
-                    input_retry(lr_num, ld_num)
-                else:
-                    pass  # 当获取的报告数与设备数不对时跳过
-
+            if lr_num != -1 and ld_num != -1:
+                input_retry(lr_num, ld_num)
             else:
-                pass  # 当未结束时跳过
-
+                pass  # 当获取的报告数与设备数不对时跳过
         else:
-            pass  # 当CMD不在主界面时跳过
+            pass  # 当未结束时跳过
+
         print("开始等待一小时")
         time.sleep(3600)  # 半小时查询一次
