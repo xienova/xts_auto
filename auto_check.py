@@ -42,7 +42,7 @@ def ocr_img(img_path):
         for line in res:
             result_list.append(line[1][0])
     print(result_list)
-    os.remove(img_path) # 使用后删除图片
+    os.remove(img_path)  # 使用后删除图片
     return result_list
 
 
@@ -100,7 +100,7 @@ def get_report_num(result_list):
         if "2023" in result_list[i]:
             num_2023 = num_2023 + 1
             print(result_list[i])
-        if "2023." in result_list[i].lower():
+        if "of" in result_list[i].lower():
             num_of = num_of + 1
             print(result_list[i])
         if "pass" in result_list[i].lower() or "fail" in result_list[i].lower() or "build" in result_list[i].lower():
@@ -111,6 +111,8 @@ def get_report_num(result_list):
     if num_2023 == num_of and pass_exist == 1:
         return num_2023 - 1
     else:
+        if pass_exist == 0:
+            print("测试报告数已经到达上限，停止测试")
         return -1
 
 
