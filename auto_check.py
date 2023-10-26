@@ -107,8 +107,8 @@ def get_report_num(result_list):
             pass_exist = 1  # 只有当出现pass/fail/build时说明报告个数在cmd中全部显示，否则获取的个数不对
             print("找到Pass/Fail/Build中的一个，退出报告计数")
             break
-
-    if num_2023 == num_of and pass_exist == 1:
+    # if num_2023 == num_of and pass_exist == 1:
+    if pass_exist == 1:
         return num_2023 - 1
     else:
         if pass_exist == 0:
@@ -134,7 +134,7 @@ def get_device_num(result_list):
             i].lower():
             print("找到State/Allocation/Build中的一个，退出设备计数")
             break
-    if num_online == num_available:
+    if num_online == num_available and num_online != 0:
         return num_available
     else:
         return -1
@@ -160,6 +160,7 @@ if __name__ == "__main__":
     img_ld_path = "./imgs/ld.png"
     lr_num = 0
     ld_num = 0
+    lr_num_list = []
 
     while 1:
         click_screenshot(img_paths)  # 点击命令行或屏幕中央并截图
@@ -168,8 +169,7 @@ if __name__ == "__main__":
             for i in range(3):  # 识别正确时退出
                 lr_list = input_lr(img_lr_path)
                 lr_num = get_report_num(lr_list)
-                if lr_num != -1:
-                    break
+                lr_num_list.append(lr_num)  # 将获取到的数据记录在列表中
 
             for i in range(3):  # 识别正确时退出
                 ld_list = input_ld(img_ld_path)
@@ -177,10 +177,12 @@ if __name__ == "__main__":
                 if ld_num != -1:
                     break
 
+            lr_num = max(lr_num_list)
             if lr_num != -1 and ld_num != -1:
                 input_retry(lr_num, ld_num)
             else:
                 pass  # 当获取的报告数与设备数不对时跳过
+            lr_num_list = []
         else:
             pass  # 当未结束时跳过
 

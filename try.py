@@ -25,4 +25,7 @@ def ocr_img(img_path):
 if __name__ == "__main__":
     # aa = pyautogui.locateCenterOnScreen('model.png')
     # print(aa)
-    os.remove('imgs/cat.jpg')
+    # os.remove('imgs/cat.jpg')
+    li = [1, 3, 2]
+    a = max(li)
+    print(a)
