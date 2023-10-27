@@ -52,8 +52,9 @@ def judge_state(result_list):
     :return:
     """
     for i in range(len(result_list) - 1, -1, -1):
-        if "final logs:" in result_list[i] or "Total Tests" in result_list[i]:
-            print("测试结束")
+        if "final logs" in result_list[i] or "Total Tests" in result_list[i]:
+            print("找到final logs 或者 Total Tests")
+            print("*********************测试结束**********************")
             return True
         else:
             pass
@@ -63,7 +64,7 @@ def judge_state(result_list):
 
 def input_lr(img_save_path):
     """
-    在命令行中输入l r，获取已有的报告
+    在命令行l d中输入l r，获取已有的报告
     :return: 识别的文字列表
     """
     pyautogui.typewrite('l r')
@@ -93,23 +94,30 @@ def get_report_num(result_list):
     :return:
     """
 
-    num_2023 = 0
-    num_of = 0
+    num_right = 0
+    position_2023 = 0
+    position_right = 0
+
     pass_exist = 0
     for i in range(len(result_list) - 1, -1, -1):
+        if "]" in result_list[i].lower() and "]" not in result_list[i - 1].lower():  # 多设备号时去掉其中一个
+            num_right = num_right + 1
+            print(result_list[i])
+            if position_right - i >= 4:  # 有些]在识别出后，位置变了
+                position_right = i
+                print(result_list[i])
         if "2023" in result_list[i]:
-            num_2023 = num_2023 + 1
-            print(result_list[i])
-        if "of" in result_list[i].lower():
-            num_of = num_of + 1
-            print(result_list[i])
+            position_2023 = i
+            if position_right - position_2023 >= 4:
+                num_right = num_right + 1
+                print(result_list[i])
+
         if "pass" in result_list[i].lower() or "fail" in result_list[i].lower() or "build" in result_list[i].lower():
             pass_exist = 1  # 只有当出现pass/fail/build时说明报告个数在cmd中全部显示，否则获取的个数不对
             print("找到Pass/Fail/Build中的一个，退出报告计数")
             break
-    # if num_2023 == num_of and pass_exist == 1:
     if pass_exist == 1:
-        return num_2023 - 1
+        return num_right - 1
     else:
         if pass_exist == 0:
             print("测试报告数已经到达上限，停止测试")
@@ -187,4 +195,4 @@ if __name__ == "__main__":
             pass  # 当未结束时跳过
 
         print("开始等待一小时")
-        time.sleep(3600)  # 半小时查询一次
+        time.sleep(1200)  # 半小时查询一次
