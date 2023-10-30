@@ -45,12 +45,10 @@ def judge_state(result_list):
     """
     for i in range(len(result_list) - 1, -1, -1):
         if "final logs" in result_list[i] or "Total Tests" in result_list[i]:
-            print("找到final logs 或者 Total Tests")
-            print("*********************测试结束**********************")
+            print(result_list[i])
             return True
         else:
             pass
-    print("test is going")
     return False
 
 
@@ -95,13 +93,14 @@ def get_report_num(result_list):
 
         if "pass" in result_list[i].lower() or "fail" in result_list[i].lower() or "build" in result_list[i].lower():
             pass_exist = 1  # 只有当出现pass/fail/build时说明报告个数在cmd中全部显示，否则获取的个数不对
+            print("找到的测试报告数为：" + str(num_2023))
             print("找到Pass/Fail/Build中的一个，退出报告计数")
             break
     if pass_exist == 1:
         return num_2023 - 1
     else:
-        if pass_exist == 0:
-            print("测试报告数已经到达上限，停止测试")
+        print("找到的测试报告数为：" + str(num_2023))
+        print("测试报告数已经到达上限，停止测试")
         return -1
 
 
@@ -140,7 +139,6 @@ def input_retry(lr_num_p, ld_num_p):
     time.sleep(5)
     pyautogui.press('enter')
     time.sleep(5)
-    print("输入的retry指令为: " + f'run retry --retry {lr_num_p} --shard-count {ld_num_p}')
 
 
 if __name__ == "__main__":
@@ -155,6 +153,8 @@ if __name__ == "__main__":
         click_screenshot(img_paths)  # 点击命令行或屏幕中央并截图
         text_list = ocr_img(img_paths)  # 获取OCR后的文字
         if judge_state(text_list):  # 判断是否结束
+            print("找到final logs 或者 Total Tests")
+            print("*********************测试结束**********************")
             for i in range(3):  # 识别正确时退出
                 lr_list = input_lr(img_lr_path)
                 lr_num = get_report_num(lr_list)
@@ -169,11 +169,13 @@ if __name__ == "__main__":
             lr_num = max(lr_num_list)
             if lr_num != -1 and ld_num != -1:
                 input_retry(lr_num, ld_num)
+                print("输入的retry指令为: " + f'run retry --retry {lr_num} --shard-count {ld_num}')
+                print("----------------------------开始下次测试--------------------------")
             else:
-                pass  # 当获取的报告数与设备数不对时跳过
+                print("获取的报告数已达上限或者设备数不对")  # 当获取的报告数与设备数不对时跳过
             lr_num_list = []
         else:
-            pass  # 当未结束时跳过
+            print("test is going")  # 当未结束时跳过
 
         print("开始等待一小时")
-        time.sleep(3600)  # 小时查询一次
+        time.sleep(1800)  # 半小时查询一次
