@@ -44,7 +44,7 @@ def judge_state(result_list):
     :return:
     """
     for i in range(len(result_list) - 1, -1, -1):
-        if "final logs" in result_list[i] or "Total Tests" in result_list[i]:
+        if "protoresultreporter" in result_list[i].lower():
             print(result_list[i])
             return True
         else:
@@ -153,7 +153,7 @@ if __name__ == "__main__":
         click_screenshot(img_paths)  # 点击命令行或屏幕中央并截图
         text_list = ocr_img(img_paths)  # 获取OCR后的文字
         if judge_state(text_list):  # 判断是否结束
-            print("找到final logs 或者 Total Tests")
+            print("找到ProtoResultReporter")
             print("*********************测试结束**********************")
             for i in range(3):  # 识别正确时退出
                 lr_list = input_lr(img_lr_path)
