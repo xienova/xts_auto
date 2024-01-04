@@ -195,4 +195,4 @@ if __name__ == "__main__":
             pass  # 当未结束时跳过
 
         print("开始等待一小时")
-        time.sleep(1200)  # 半小时查询一次
+        time.sleep(3600)  # 半小时查询一次

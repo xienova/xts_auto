@@ -84,22 +84,22 @@ def get_report_num(result_list):
     :return:
     """
 
-    num_2023 = 0
+    num_2024 = 0
     pass_exist = 0
     for i in range(len(result_list) - 1, -1, -1):
-        if "2023" in result_list[i]:
-            num_2023 = num_2023 + 1
+        if "2024" in result_list[i]:
+            num_2024 = num_2024 + 1
             print(result_list[i])
 
         if "pass" in result_list[i].lower() or "fail" in result_list[i].lower() or "build" in result_list[i].lower():
             pass_exist = 1  # 只有当出现pass/fail/build时说明报告个数在cmd中全部显示，否则获取的个数不对
-            print("找到的测试报告数为：" + str(num_2023))
+            print("找到的测试报告数为：" + str(num_2024))
             print("找到Pass/Fail/Build中的一个，退出报告计数")
             break
     if pass_exist == 1:
-        return num_2023 - 1
+        return num_2024 - 1
     else:
-        print("找到的测试报告数为：" + str(num_2023))
+        print("找到的测试报告数为：" + str(num_2024))
         print("测试报告数已经到达上限，停止测试")
         return -1
 
@@ -178,4 +178,5 @@ if __name__ == "__main__":
             print("test is going")  # 当未结束时跳过
 
         print("开始等待一小时")
-        time.sleep(1800)  # 半小时查询一次
+        time.sleep(3600)  # 小时查询一次
+
